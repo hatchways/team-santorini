@@ -11,7 +11,11 @@ import logo from '../../Images/logo.png';
 import useStyles from './useStyles';
 import CreateBoardDialog from '../CreateBoardDialog/CreateBoardDialog';
 import { useAuth } from '../../context/useAuthContext';
+import { useBoard } from '../../context/useBoardContext';
+import { useHistory } from 'react-router-dom';
 import { User } from '../../interface/User';
+import { UpdateBoardApiData } from '../../interface/Board';
+import { newBoard } from '../../helpers/APICalls/boardAPI';
 import UploadImageWidget from '../../helpers/Image/uploadImage';
 
 interface Props {
@@ -24,6 +28,8 @@ const DashboardHeader = ({ loggedInUser }: Props): JSX.Element => {
   const [createBoardOpen, setCreateBoardOpen] = React.useState(false);
   const open = Boolean(anchorEl);
   const { logout, updateUser } = useAuth();
+  const { fetchBoardTitles } = useBoard();
+  const history = useHistory();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -51,7 +57,13 @@ const DashboardHeader = ({ loggedInUser }: Props): JSX.Element => {
     setCreateBoardOpen(true);
   };
 
-  const handleCloseCreateBoard = () => {
+  const handleCloseCreateBoard = (title: string) => {
+    if (title) {
+      newBoard(loggedInUser, title).then((data: UpdateBoardApiData) => {
+        fetchBoardTitles(loggedInUser, true);
+        if (data.success) history.push({ search: `?board=${data.success._id}` });
+      });
+    }
     setCreateBoardOpen(false);
   };
 

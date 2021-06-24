@@ -1,7 +1,7 @@
 const Column = require("../models/Column");
 const Board = require("../models/Board");
 
-const generateBoard = async () => {
+const generateBoard = async (boardtitle) => {
   // A new board already comes with the "in progress" and "completed" columns and is created for the user when they sign up
   const inProgressColumn = await Column.create({
     title: "In Progress",
@@ -14,11 +14,11 @@ const generateBoard = async () => {
   });
 
   const board = await Board.create({
-    title: "New Board",
+    title: boardtitle,
     columns: [inProgressColumn, completedColumn],
   });
   
-  return [ board._id ]
+  return board
 }
 
 module.exports = generateBoard;

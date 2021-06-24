@@ -14,12 +14,14 @@ const getBoard = async (id: string): Promise<UpdateBoardApiData> => {
     }));
 };
 
-const newBoard = async (user: User): Promise<UpdateBoardApiData> => {
+const newBoard = async (user: User, title: string): Promise<UpdateBoardApiData> => {
   const fetchOptions: FetchOptions = {
-    method: 'GET',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id: user.id, title }),
     credentials: 'include',
   };
-  return await fetch(`/board/create?id=${user.id}`, fetchOptions)
+  return await fetch(`/board/create`, fetchOptions)
     .then((res) => res.json())
     .catch(() => ({
       error: { message: 'Unable to connect to server. Please try again' },

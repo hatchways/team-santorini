@@ -1,5 +1,5 @@
 import { useState, useContext, createContext, FunctionComponent } from 'react';
-import { Board, BoardTitleApiData, UpdateBoardApiData } from '../interface/Board';
+import { Board, BoardTitlePair, BoardTitleApiData, UpdateBoardApiData } from '../interface/Board';
 import { User } from '../interface/User';
 import { getBoardTitles, getBoard } from '../helpers/APICalls/boardAPI';
 
@@ -7,9 +7,9 @@ interface IBoardContext {
   currentBoard: Board;
   setBoard: (data: Board) => void;
   publishBoard: () => void;
-  fetchBoard: (user: User, index: number) => void;
-  boardTitles: string[];
-  fetchBoardTitles: (user: User) => void;
+  fetchBoard: (id: string) => void;
+  boardTitles: BoardTitlePair[];
+  fetchBoardTitles: (user: User, force: boolean) => void;
 }
 
 export const BoardContext = createContext<IBoardContext>({
@@ -23,7 +23,7 @@ export const BoardContext = createContext<IBoardContext>({
 
 export const BoardProvider: FunctionComponent = ({ children }): JSX.Element => {
   const [currentBoard, setCurrentBoard] = useState<Board>({ _id: '', title: '', columns: [] });
-  const [boardTitles, setBoardNames] = useState<string[]>([]);
+  const [boardTitles, setBoardNames] = useState<BoardTitlePair[]>([]);
 
   const setBoard = (data: Board) => {
     setCurrentBoard(data);
@@ -33,19 +33,17 @@ export const BoardProvider: FunctionComponent = ({ children }): JSX.Element => {
     console.log(currentBoard);
   };
 
-  const fetchBoard = async (user: User, index: number) => {
-    if (!user.boards || user.boards.length <= index) return;
-    const id = user.boards[index];
-    await getBoard(id).then((data: UpdateBoardApiData) => {
-      if (data.success) setCurrentBoard(data.success);
-    });
+  const fetchBoard = async (id: string) => {
+    const data: UpdateBoardApiData = await getBoard(id);
+    if (data.success) setCurrentBoard(data.success);
+    else throw new Error(data.error ? data.error.message : 'An unknown error occurred');
   };
 
-  const fetchBoardTitles = async (user: User) => {
-    if (boardTitles.length > 0) return;
-    await getBoardTitles(user).then((data: BoardTitleApiData) => {
-      if (data.success) setBoardNames(data.success.titles);
-    });
+  const fetchBoardTitles = async (user: User, force = false) => {
+    if (!force && boardTitles.length > 0) return;
+    const data: BoardTitleApiData = await getBoardTitles(user);
+    if (data.success) setBoardNames(data.success);
+    else throw new Error(data.error ? data.error.message : 'An unknown error occurred');
   };
 
   return (

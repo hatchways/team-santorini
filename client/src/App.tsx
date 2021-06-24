@@ -8,7 +8,7 @@ import BoardUI from './components/BoardUI/BoardUI';
 import { AuthProvider } from './context/useAuthContext';
 import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
-import BoardProvider from './mocks/mockUseBoardContext';
+import { BoardProvider } from './context/useBoardContext';
 
 import './App.css';
 
@@ -23,7 +23,7 @@ function App(): JSX.Element {
                 <Switch>
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/signup" component={Signup} />
-                  <Route exact path="/dashboard">
+                  <Route path="/dashboard">
                     <Dashboard />
                   </Route>
                   <Route exact path="/board-ui" component={BoardUI} />

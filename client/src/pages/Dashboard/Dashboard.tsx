@@ -4,7 +4,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import useStyles from './useStyles';
 import { useAuth } from '../../context/useAuthContext';
 import { useSocket } from '../../context/useSocketContext';
-import { useHistory } from 'react-router-dom';
+import { useBoard } from '../../context/useBoardContext';
+import { useSnackBar } from '../../context/useSnackbarContext';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import DashboardHeader from '../../components/DashboardHeader/DashboardHeader';
 import DashboardAppBar from '../../components/DashboardAppBar/DashboardAppBar';
@@ -18,11 +20,14 @@ import initialData from '../../components/BoardUI/initial-data';
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
   const [createColumnOpen, setCreateColumnOpen] = useState(false);
+  const { currentBoard, fetchBoard } = useBoard();
 
   const { loggedInUser } = useAuth();
   const { initSocket } = useSocket();
+  const { updateSnackBarMessage } = useSnackBar();
 
   const history = useHistory();
+  const location = useLocation();
 
   const handleClickCreateColumn = () => {
     setCreateColumnOpen(true);
@@ -30,6 +35,27 @@ export default function Dashboard(): JSX.Element {
 
   const handleCloseCreateColumn = () => {
     setCreateColumnOpen(false);
+  };
+
+  const loadDefaultBoard = async () => {
+    try {
+      if (loggedInUser && loggedInUser.boards && loggedInUser.boards.length > 0) {
+        await fetchBoard(loggedInUser.boards[0]);
+        history.push({
+          search: `?board=${loggedInUser.boards[0]}`,
+        });
+      }
+    } catch (e) {
+      updateSnackBarMessage(e.message);
+    }
+  };
+
+  const loadNewBoard = async (newid: string) => {
+    try {
+      await fetchBoard(newid);
+    } catch (e) {
+      updateSnackBarMessage(e.message);
+    }
   };
 
   useEffect(() => {
@@ -41,6 +67,15 @@ export default function Dashboard(): JSX.Element {
     history.push('/login');
     // loading for a split seconds until history.push works
     return <CircularProgress />;
+  }
+
+  const query = new URLSearchParams(location.search).get('board');
+
+  if (!query) {
+    loadDefaultBoard();
+    return <CircularProgress />;
+  } else if (currentBoard._id != query) {
+    loadNewBoard(query);
   }
 
   return (

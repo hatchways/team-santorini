@@ -9,6 +9,7 @@ import { AuthProvider } from './context/useAuthContext';
 import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
 import BoardProvider from './mocks/mockUseBoardContext';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 
 import './App.css';
 
@@ -23,9 +24,7 @@ function App(): JSX.Element {
                 <Switch>
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/signup" component={Signup} />
-                  <Route exact path="/dashboard">
-                    <Dashboard />
-                  </Route>
+                  <ProtectedRoute exact path="/dashboard" component={Dashboard} />
                   <Route exact path="/board-ui" component={BoardUI} />
                   <Route path="*">
                     <Redirect to="/login" />

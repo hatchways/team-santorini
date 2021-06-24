@@ -55,11 +55,6 @@ const DashboardHeader = ({ loggedInUser }: Props): JSX.Element => {
     setCreateBoardOpen(false);
   };
 
-  const handleLogout = () => {
-    handleClose();
-    logout();
-  };
-
   return (
     <Box className={classes.header}>
       <Box flexGrow={1}>

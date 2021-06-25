@@ -8,7 +8,7 @@ import BoardUI from './components/BoardUI/BoardUI';
 import { AuthProvider } from './context/useAuthContext';
 import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
-import BoardProvider from './mocks/mockUseBoardContext';
+import { BoardProvider } from './context/useBoardContext';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 
 import './App.css';

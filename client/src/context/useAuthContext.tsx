@@ -30,7 +30,7 @@ export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
   const updateLoginContext = useCallback(
     (data: AuthApiDataSuccess) => {
       setLoggedInUser(data.user);
-      fetchBoardTitles(data.user);
+      fetchBoardTitles(data.user, false);
       history.push('/dashboard');
     },
     [history],

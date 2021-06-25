@@ -11,7 +11,12 @@ export interface UpdateBoardApiData {
   error?: { message: string };
 }
 
+export interface BoardTitlePair {
+  id: string;
+  title: string;
+}
+
 export interface BoardTitleApiData {
-  success?: { titles: string[] };
+  success?: BoardTitlePair[];
   error?: { message: string };
 }

@@ -19,12 +19,12 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     throw new Error("A user with that email already exists");
   }
 
-  const boards = generateBoard();
+  const board = await generateBoard('My School Board');
 
   let user = await User.create({
     email,
     password,
-    boards,
+    boards: [ board._id ],
   });
 
   if (user) {
@@ -61,11 +61,6 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
       httpOnly: true,
       maxAge: secondsInWeek * 1000,
     });
-
-    if (user.boards.length === 0) {
-        user.boards = await generateBoard();
-        await User.findByIdAndUpdate(user._id, user ).exec();
-    }
 
     res.status(200).json({
       success: {user: filterUser(user)},

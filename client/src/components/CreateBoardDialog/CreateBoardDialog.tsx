@@ -13,17 +13,28 @@ import CloseIcon from '@material-ui/icons/Close';
 
 interface Props {
   createBoardOpen: boolean;
-  handleCloseCreateBoard: () => void;
+  handleCloseCreateBoard: (title: string) => void;
 }
 
 const CreateBoardDialog = ({ createBoardOpen, handleCloseCreateBoard }: Props): JSX.Element => {
   const classes = useStyles();
+  const [text, setText] = React.useState<string>('');
+
+  const handleClose = () => {
+    handleCloseCreateBoard('');
+  };
+  const handleSubmit = () => {
+    handleCloseCreateBoard(text);
+  };
+  const onChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setText(e.target.value);
+  };
 
   return (
     <div>
-      <Dialog open={createBoardOpen} onClose={handleCloseCreateBoard} aria-labelledby="form-dialog-title">
+      <Dialog open={createBoardOpen} onClose={handleClose} aria-labelledby="form-dialog-title">
         <Box className={classes.dialog}>
-          <IconButton className={classes.closeButton} aria-label="close" onClick={handleCloseCreateBoard}>
+          <IconButton className={classes.closeButton} aria-label="close" onClick={handleClose}>
             <CloseIcon />
           </IconButton>
           <DialogTitle id="form-dialog-title">
@@ -36,17 +47,13 @@ const CreateBoardDialog = ({ createBoardOpen, handleCloseCreateBoard }: Props): 
               id="outlined-basic"
               placeholder="Add Title"
               variant="outlined"
+              onChange={onChangeText}
             >
               <Typography className={classes.text}></Typography>
             </TextField>
           </DialogContent>
           <DialogActions className={classes.actions}>
-            <Button
-              className={classes.createButton}
-              onClick={handleCloseCreateBoard}
-              color="primary"
-              variant="contained"
-            >
+            <Button className={classes.createButton} onClick={handleSubmit} color="primary" variant="contained">
               Create
             </Button>
           </DialogActions>

@@ -28,7 +28,7 @@ const DashboardHeader = ({ loggedInUser }: Props): JSX.Element => {
   const [createBoardOpen, setCreateBoardOpen] = React.useState(false);
   const open = Boolean(anchorEl);
   const { logout, updateUser } = useAuth();
-  const { fetchBoardTitles } = useBoard();
+  const { fetchBoardTitles, publishBoard } = useBoard();
   const history = useHistory();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -93,6 +93,11 @@ const DashboardHeader = ({ loggedInUser }: Props): JSX.Element => {
           Create board
         </Button>
         <CreateBoardDialog createBoardOpen={createBoardOpen} handleCloseCreateBoard={handleCloseCreateBoard} />
+      </Box>
+      <Box>
+        <Button className={classes.createBoardButton} color="primary" variant="contained" onClick={publishBoard}>
+          Save Board
+        </Button>
       </Box>
 
       <Box>

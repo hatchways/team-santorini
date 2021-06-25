@@ -1,4 +1,6 @@
 const Board = require("../models/Board");
+const Column = require("../models/Column");
+const Card = require("../models/Card");
 const fullBoard = require("../utils/fullBoard");
 const asyncHandler = require("express-async-handler");
 const generateBoard = require("../utils/generateBoard");
@@ -16,13 +18,31 @@ exports.fullBoardById = asyncHandler(async (req, res, next) => {
   }
 });
 
-// @route PUT /board/update
-// @desc Update board by reordering columns and/or cards
+// @route POST /board/update
+// @desc Update board with new columns and/or cards
 // @access Private
 exports.updateBoard = asyncHandler(async (req, res, next) => {
   try {
     const newBoard = req.body.board;
-    const board = await Board.findByIdAndUpdate(newBoard._id, newBoard).exec();
+    let updateCards = [];
+    let updateColumns = [];
+    if (newBoard.columns) {
+      updateColumns = newBoard.columns.map(column => {
+        if (column.cards) {
+          updateCards = updateCards.concat(column.cards.map(card => {
+            return { updateOne: {filter: { _id: card._id }, update: card} };
+          }));
+          column.cards = column.cards.map(card => card._id);
+        }
+      return { updateOne: { filter: { _id: column._id }, update: column } };
+    });
+    newBoard.columns = newBoard.columns.map(column => column._id);
+  }
+  const [board] = await Promise.all([
+    Board.findByIdAndUpdate(newBoard._id, newBoard).exec(),
+    Column.bulkWrite(updateColumns, { ordered: false }),
+    Card.bulkWrite(updateCards, { ordered: false }),
+  ]);
     res.status(200).json({ success: await fullBoard(board) });
   } catch (err) {
     console.error(err);

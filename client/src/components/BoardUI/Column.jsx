@@ -1,16 +1,11 @@
-// import { useState } from 'react';
 import Card from './Card';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import useStyles from './useStyles';
 import TextField from '@material-ui/core/TextField';
 
-// const Container = ({ children }) => <div className='column-container'>{children}</div>;
-// const Title = ({ children }) => <h3 className='column-title'>{children}</h3>;
-
 // eslint-disable-next-line
 const Column = ({ column, cards, index, handleSubmit, handleInput }) => {
   const classes = useStyles();
-  // const [cardTitle, setcardTitle] = useState('');
 
   return (
     <Draggable draggableId={column.id} index={index}>

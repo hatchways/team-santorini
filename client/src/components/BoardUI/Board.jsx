@@ -30,8 +30,6 @@ const Board = ({ boardData }) => {
       },
     };
     setData(newData);
-    console.log(e);
-    console.log(e.target[0].value);
     e.target[0].value = '';
   };
 

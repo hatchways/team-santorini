@@ -82,10 +82,6 @@ exports.loadUser = asyncHandler(async (req, res, next) => {
     throw new Error("Not authorized");
   }
 
-  const fullBoardById = await Board.findById(user.board)
-    .populate({ path: "columns", populate: { path: "cards" } })
-    .exec();
-
   res.status(200).json({
     success: { user: filterUser(user) },
   });

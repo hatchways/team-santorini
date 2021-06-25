@@ -1,8 +1,6 @@
 import { Draggable } from 'react-beautiful-dnd';
 import useStyles from './useStyles';
 
-// const Container = ({ children }) => <div className='task-container'>{children}</div>
-
 // eslint-disable-next-line
 const Card = ({ card, index }) => {
   const classes = useStyles();

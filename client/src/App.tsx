@@ -8,6 +8,7 @@ import { AuthProvider } from './context/useAuthContext';
 import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
 import { BoardProvider } from './context/useBoardContext';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 
 import './App.css';
 
@@ -22,9 +23,7 @@ function App(): JSX.Element {
                 <Switch>
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/signup" component={Signup} />
-                  <Route path="/dashboard">
-                    <Dashboard />
-                  </Route>
+                  <ProtectedRoute exact path="/dashboard" component={Dashboard} />
                   <Route path="*">
                     <Redirect to="/login" />
                   </Route>

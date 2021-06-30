@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Column from './Column';
 import useStyles from './useStyles';
@@ -8,6 +8,10 @@ const Board = ({ boardData }) => {
   const classes = useStyles();
   const [data, setData] = useState(boardData);
   const [cardTitle, setCardTitle] = useState('');
+
+  useEffect(() => {
+    setData(boardData);
+  }, [boardData]);
 
   const handleCardSubmit = (e) => {
     e.preventDefault();

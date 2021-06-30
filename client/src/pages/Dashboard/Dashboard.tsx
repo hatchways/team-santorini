@@ -14,7 +14,7 @@ import BoardUI from '../../components/BoardUI/BoardUI';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import Box from '@material-ui/core/Box';
-import CreateColumnDialog from '../../components/CreateColumnDialog/CreateColumnDialog';
+import CreateColumnDialog from '../../components/Dialogs/CreateColumnDialog/CreateColumnDialog';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();

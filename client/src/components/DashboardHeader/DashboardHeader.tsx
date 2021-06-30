@@ -9,7 +9,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import logo from '../../Images/logo.png';
 import useStyles from './useStyles';
-import CreateBoardDialog from '../CreateBoardDialog/CreateBoardDialog';
+import CreateBoardDialog from '../Dialogs/CreateBoardDialog/CreateBoardDialog';
 import { useAuth } from '../../context/useAuthContext';
 import { useBoard } from '../../context/useBoardContext';
 import { useHistory } from 'react-router-dom';
